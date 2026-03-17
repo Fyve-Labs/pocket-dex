@@ -9,7 +9,6 @@ import (
 	"github.com/dexidp/dex/storage/memory"
 	"github.com/pocketbase/dbx"
 	"github.com/pocketbase/pocketbase/core"
-	"github.com/pocketbase/pocketbase/tools/types"
 )
 
 const (
@@ -39,14 +38,6 @@ func New(app core.App) storage.Storage {
 
 func WithPocketbaseStorage(s storage.Storage, app core.App) storage.Storage {
 	return pbStorage{s, app}
-}
-
-type Connector struct {
-	ID         string `db:"id" json:"id"`
-	Name       string
-	Type       string
-	Config     types.JSONRaw
-	GrantTypes types.JSONArray[string]
 }
 
 func toStorageClient(r *core.Record) storage.Client {

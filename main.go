@@ -16,7 +16,7 @@ import (
 	"github.com/pocketbase/pocketbase/tools/hook"
 	"github.com/pocketbase/pocketbase/tools/security"
 
-	//_ "github.com/Fyve-Labs/dex-pocket/migrations"
+	_ "github.com/Fyve-Labs/pocket-dex/migrations"
 	dex "github.com/dexidp/dex/server"
 )
 
@@ -57,9 +57,6 @@ func main() {
 			Signer:                     signerInstance,
 			IDTokensValidFor:           idTokensValidFor,
 		}
-
-		serverConfig.Storage = s
-
 		dexServer, err := dex.NewServer(context.Background(), serverConfig)
 		if err != nil {
 			return err
