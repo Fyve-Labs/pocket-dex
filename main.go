@@ -59,13 +59,13 @@ func main() {
 		}
 
 		serverConfig := dex.Config{
-			SkipApprovalScreen:         true,
 			AlwaysShowLoginScreen:      false,
+			ContinueOnConnectorFailure: true,
+			SkipApprovalScreen:         true,
 			Issuer:                     getEnv("DEX_ISSUER", "http://127.0.0.1:8090"),
 			Storage:                    s,
-			Logger:                     app.Logger(),
+			Logger:                     logger,
 			Now:                        now,
-			ContinueOnConnectorFailure: false,
 			Signer:                     signerInstance,
 			IDTokensValidFor:           idTokensValidFor,
 		}

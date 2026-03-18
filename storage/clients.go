@@ -31,13 +31,22 @@ func records2Ids(records []*core.Record) []string {
 	return ids
 }
 
+func expandToStorageClient(app core.App, record *core.Record) (storage.Client, error) {
+	errs := app.ExpandRecord(record, []string{"allowedConnectors", "trustedPeers"}, nil)
+	if len(errs) > 0 {
+		return storage.Client{}, fmt.Errorf("failed to expand: %v", errs)
+	}
+
+	return toStorageClient(record), nil
+}
+
 func (s pbStorage) GetClient(ctx context.Context, id string) (storage.Client, error) {
 	record, err := s.App.FindRecordById("clients", id)
 	if err != nil {
 		return storage.Client{}, convertDBError("get client: %w", err)
 	}
 
-	return toStorageClient(record), nil
+	return expandToStorageClient(s.App, record)
 }
 
 func (s pbStorage) ListClients(ctx context.Context) ([]storage.Client, error) {
@@ -48,11 +57,12 @@ func (s pbStorage) ListClients(ctx context.Context) ([]storage.Client, error) {
 
 	clients := make([]storage.Client, len(records))
 	for i, record := range records {
-		errs := s.App.ExpandRecord(record, []string{"allowedConnectors", "trustedPeers"}, nil)
-		if len(errs) > 0 {
-			return []storage.Client{}, fmt.Errorf("failed to expand: %v", errs)
+		client, err := expandToStorageClient(s.App, record)
+		if err != nil {
+			return []storage.Client{}, err
 		}
-		clients[i] = toStorageClient(record)
+
+		clients[i] = client
 	}
 
 	return clients, nil
