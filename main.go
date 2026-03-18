@@ -2,9 +2,11 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"os"
 	"path/filepath"
+	"runtime"
 	"time"
 
 	dex "github.com/dexidp/dex/server"
@@ -16,6 +18,7 @@ import (
 	"github.com/pocketbase/pocketbase/plugins/migratecmd"
 	"github.com/pocketbase/pocketbase/tools/hook"
 	"github.com/pocketbase/pocketbase/tools/security"
+	"github.com/spf13/cobra"
 
 	_ "github.com/Fyve-Labs/pocket-dex/migrations"
 	"github.com/Fyve-Labs/pocket-dex/storage"
@@ -36,13 +39,15 @@ func main() {
 		Repo:  "pocket-dex",
 	})
 
+	app.RootCmd.AddCommand(commandVersion())
+
 	app.OnServe().BindFunc(func(e *core.ServeEvent) error {
 		now := func() time.Time { return time.Now().UTC() }
 		idTokensValidFor := 24 * time.Hour
 		keysRotationPeriod := getEnv("DEX_EXPIRY_SIGNING_KEYS", "6h")
 
 		logger := e.App.Logger()
-		s, err := storage.New(e.App, getEnv("DEX_STORAGE_SQLITE3_CONFIG_FILE", filepath.Join(app.DataDir(), "dex.db")))
+		s, err := storage.New(e.App, getEnv("DEX_STORAGE_SQLITE3_CONFIG_FILE", filepath.Join(e.App.DataDir(), "dex.db")))
 		if err != nil {
 			return err
 		}
@@ -102,6 +107,24 @@ func main() {
 	err := app.Start()
 	if err != nil {
 		log.Fatal(err)
+	}
+}
+
+var version = "DEV"
+
+func commandVersion() *cobra.Command {
+	return &cobra.Command{
+		Use:   "version",
+		Short: "Print the version and exit",
+		Run: func(_ *cobra.Command, _ []string) {
+			fmt.Printf(
+				"Pocket Dex Version: %s\nGo Version: %s\nGo OS/ARCH: %s %s\n",
+				version,
+				runtime.Version(),
+				runtime.GOOS,
+				runtime.GOARCH,
+			)
+		},
 	}
 }
 
