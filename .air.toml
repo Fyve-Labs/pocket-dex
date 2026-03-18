@@ -7,10 +7,10 @@ tmp_dir = "tmp"
 
 [build]
   args_bin = ["serve"]
-  bin = "./tmp/main"
-  cmd = "go build -o ./tmp/main ."
+  bin = "./main"
+  cmd = "go build -o ./main ."
   delay = 1000
-  entrypoint = ["./tmp/main"]
+  entrypoint = ["./main"]
   exclude_dir = ["assets", "tmp", "vendor", "testdata"]
   exclude_file = []
   exclude_regex = ["_test.go"]
@@ -45,7 +45,7 @@ tmp_dir = "tmp"
   time = false
 
 [misc]
-  clean_on_exit = false
+  clean_on_exit = true
 
 [proxy]
   app_port = 0

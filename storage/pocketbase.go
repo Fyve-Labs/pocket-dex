@@ -99,6 +99,10 @@ func (s pbStorage) ListConnectors(ctx context.Context) ([]storage.Connector, err
 		return []storage.Connector{}, convertDBError("get connectors: %w", err)
 	}
 
+	if len(records) == 0 {
+		return s.Storage.ListConnectors(ctx)
+	}
+
 	connectors := make([]storage.Connector, len(records))
 	for i, record := range records {
 		connectors[i] = toStorageConnector(record)
