@@ -70,8 +70,8 @@ func main() {
 		return e.Next()
 	})
 
-	app.OnRecordCreate("clients", "connectors").Bind(&hook.Handler[*core.RecordEvent]{
-		Func: func(e *core.RecordEvent) error {
+	app.OnRecordCreateRequest("clients", "connectors").Bind(&hook.Handler[*core.RecordRequestEvent]{
+		Func: func(e *core.RecordRequestEvent) error {
 			record := e.Record
 			if record.IsNew() {
 				rawID, _ := record.GetRaw("id").(string)
@@ -84,13 +84,12 @@ func main() {
 					rawSecret, _ := record.GetRaw("secret").(string)
 					public := record.GetBool("public")
 					if rawSecret == "" && !public {
-						record.SetRaw("secret", security.RandomString(32))
+						record.SetRaw("secret", security.RandomStringWithAlphabet(16, "abcdefghijklmnopqrstuvwxyz0123456789"))
 					}
 				}
 			}
 			return e.Next()
 		},
-		Priority: -100, // Need to fire before __pbRecordSystemHook__
 	})
 
 	err := app.Start()

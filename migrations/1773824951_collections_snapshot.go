@@ -912,7 +912,7 @@ func init() {
 						"max": 64,
 						"min": 1,
 						"name": "id",
-						"pattern": "^[a-z0-9]+$",
+						"pattern": "^[a-z0-9-]+$",
 						"presentable": true,
 						"primaryKey": true,
 						"required": true,
@@ -978,15 +978,6 @@ func init() {
 						"type": "url"
 					},
 					{
-						"hidden": false,
-						"id": "bool2231267043",
-						"name": "disabled",
-						"presentable": false,
-						"required": false,
-						"system": false,
-						"type": "bool"
-					},
-					{
 						"cascadeDelete": false,
 						"collectionId": "pbc_1335902081",
 						"hidden": false,
@@ -1011,6 +1002,15 @@ func init() {
 						"required": false,
 						"system": false,
 						"type": "relation"
+					},
+					{
+						"hidden": false,
+						"id": "bool2231267043",
+						"name": "disabled",
+						"presentable": false,
+						"required": false,
+						"system": false,
+						"type": "bool"
 					},
 					{
 						"hidden": false,

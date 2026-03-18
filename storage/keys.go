@@ -42,11 +42,12 @@ func (s pbStorage) GetKeys(ctx context.Context) (storage.Keys, error) {
 }
 
 func (s pbStorage) UpdateKeys(ctx context.Context, updater func(old storage.Keys) (storage.Keys, error)) error {
+	collection, err := s.App.FindCollectionByNameOrId("keys")
+	if err != nil {
+		return err
+	}
+
 	return s.App.RunInTransaction(func(txApp core.App) error {
-		collection, err := txApp.FindCollectionByNameOrId("keys")
-		if err != nil {
-			return err
-		}
 		firstUpdate := false
 		storageKeys, err := getKeys(ctx, txApp)
 		if err != nil {
