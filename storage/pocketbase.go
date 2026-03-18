@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	dex "github.com/dexidp/dex/server"
 	"github.com/dexidp/dex/storage"
 	"github.com/dexidp/dex/storage/memory"
 	"github.com/pocketbase/dbx"
@@ -22,15 +21,7 @@ type pbStorage struct {
 }
 
 func New(app core.App) storage.Storage {
-	storageConnectors := make([]storage.Connector, 0)
-	storageConnectors = append(storageConnectors, storage.Connector{
-		ID:   dex.LocalConnector,
-		Name: "Email",
-		Type: dex.LocalConnector,
-	})
-
 	s := memory.New(app.Logger())
-	s = storage.WithStaticConnectors(s, storageConnectors)
 	s = WithPocketbaseStorage(s, app)
 
 	return s

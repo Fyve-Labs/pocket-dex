@@ -900,6 +900,149 @@ func init() {
 				"type": "base",
 				"updateRule": null,
 				"viewRule": null
+			},
+			{
+				"createRule": null,
+				"deleteRule": null,
+				"fields": [
+					{
+						"autogeneratePattern": "",
+						"hidden": false,
+						"id": "text3208210256",
+						"max": 64,
+						"min": 1,
+						"name": "id",
+						"pattern": "^[a-z0-9]+$",
+						"presentable": true,
+						"primaryKey": true,
+						"required": true,
+						"system": true,
+						"type": "text"
+					},
+					{
+						"autogeneratePattern": "",
+						"hidden": false,
+						"id": "text1579384326",
+						"max": 64,
+						"min": 1,
+						"name": "name",
+						"pattern": "",
+						"presentable": false,
+						"primaryKey": false,
+						"required": true,
+						"system": false,
+						"type": "text"
+					},
+					{
+						"autogeneratePattern": "",
+						"hidden": true,
+						"id": "text1554180325",
+						"max": 0,
+						"min": 0,
+						"name": "secret",
+						"pattern": "",
+						"presentable": false,
+						"primaryKey": false,
+						"required": false,
+						"system": false,
+						"type": "text"
+					},
+					{
+						"hidden": false,
+						"id": "bool1001664029",
+						"name": "public",
+						"presentable": false,
+						"required": false,
+						"system": false,
+						"type": "bool"
+					},
+					{
+						"hidden": false,
+						"id": "json1954443099",
+						"maxSize": 0,
+						"name": "redirectURIs",
+						"presentable": false,
+						"required": false,
+						"system": false,
+						"type": "json"
+					},
+					{
+						"exceptDomains": null,
+						"hidden": false,
+						"id": "url4246722142",
+						"name": "logoURL",
+						"onlyDomains": null,
+						"presentable": false,
+						"required": false,
+						"system": false,
+						"type": "url"
+					},
+					{
+						"hidden": false,
+						"id": "bool2231267043",
+						"name": "disabled",
+						"presentable": false,
+						"required": false,
+						"system": false,
+						"type": "bool"
+					},
+					{
+						"cascadeDelete": false,
+						"collectionId": "pbc_1335902081",
+						"hidden": false,
+						"id": "relation4109436078",
+						"maxSelect": 10,
+						"minSelect": 0,
+						"name": "allowedConnectors",
+						"presentable": false,
+						"required": false,
+						"system": false,
+						"type": "relation"
+					},
+					{
+						"cascadeDelete": false,
+						"collectionId": "pbc_2442875294",
+						"hidden": false,
+						"id": "relation4019875261",
+						"maxSelect": 10,
+						"minSelect": 0,
+						"name": "trustedPeers",
+						"presentable": false,
+						"required": false,
+						"system": false,
+						"type": "relation"
+					},
+					{
+						"hidden": false,
+						"id": "autodate2990389176",
+						"name": "created",
+						"onCreate": true,
+						"onUpdate": false,
+						"presentable": false,
+						"system": false,
+						"type": "autodate"
+					},
+					{
+						"hidden": false,
+						"id": "autodate3332085495",
+						"name": "updated",
+						"onCreate": true,
+						"onUpdate": true,
+						"presentable": false,
+						"system": false,
+						"type": "autodate"
+					}
+				],
+				"id": "pbc_2442875294",
+				"indexes": [
+					"CREATE INDEX ` + "`" + `idx_TkO6kay5S0` + "`" + ` ON ` + "`" + `clients` + "`" + ` (` + "`" + `disabled` + "`" + `)"
+				],
+				"listRule": null,
+				"name": "clients",
+				"system": false,
+				"type": "base",
+				"updateRule": null,
+				"viewRule": null
 			}
 		]`
 
