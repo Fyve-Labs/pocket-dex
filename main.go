@@ -4,41 +4,45 @@ import (
 	"context"
 	"log"
 	"os"
+	"path/filepath"
 	"time"
 
-	"github.com/Fyve-Labs/pocket-dex/storage"
-	"github.com/dexidp/dex/pkg/featureflags"
+	dex "github.com/dexidp/dex/server"
 	"github.com/dexidp/dex/server/signer"
 	"github.com/gosimple/slug"
 	"github.com/pocketbase/pocketbase"
 	"github.com/pocketbase/pocketbase/core"
+	"github.com/pocketbase/pocketbase/plugins/ghupdate"
 	"github.com/pocketbase/pocketbase/plugins/migratecmd"
 	"github.com/pocketbase/pocketbase/tools/hook"
 	"github.com/pocketbase/pocketbase/tools/security"
 
 	_ "github.com/Fyve-Labs/pocket-dex/migrations"
-	dex "github.com/dexidp/dex/server"
+	"github.com/Fyve-Labs/pocket-dex/storage"
 )
 
 func main() {
-	isDev := os.Getenv("ENV") == "dev"
 	app := pocketbase.NewWithConfig(pocketbase.Config{
-		DefaultDev: isDev,
+		DefaultDataDir: getEnv("DATA_PATH", "./pb_data"),
 	})
 
-	// enable auto-creation of migration files when making collection changes in the Admin UI
 	migratecmd.MustRegister(app, app.RootCmd, migratecmd.Config{
-		Automigrate: isDev,
-		Dir:         "./migrations",
+		Dir: "./migrations",
+	})
+
+	// GitHub selfupdate
+	ghupdate.MustRegister(app, app.RootCmd, ghupdate.Config{
+		Owner: "Fyve-Labs",
+		Repo:  "pocket-dex",
 	})
 
 	app.OnServe().BindFunc(func(e *core.ServeEvent) error {
 		now := func() time.Time { return time.Now().UTC() }
 		idTokensValidFor := 24 * time.Hour
-		keysRotationPeriod := "6h"
+		keysRotationPeriod := getEnv("DEX_EXPIRY_SIGNING_KEYS", "6h")
 
 		logger := e.App.Logger()
-		s, err := storage.New(e.App, "./pb_data/dex.db")
+		s, err := storage.New(e.App, getEnv("DEX_STORAGE_SQLITE3_CONFIG_FILE", filepath.Join(app.DataDir(), "dex.db")))
 		if err != nil {
 			return err
 		}
@@ -52,11 +56,11 @@ func main() {
 		serverConfig := dex.Config{
 			SkipApprovalScreen:         true,
 			AlwaysShowLoginScreen:      false,
-			Issuer:                     "http://127.0.0.1:8090",
+			Issuer:                     getEnv("DEX_ISSUER", "http://127.0.0.1:8090"),
 			Storage:                    s,
 			Logger:                     app.Logger(),
 			Now:                        now,
-			ContinueOnConnectorFailure: featureflags.ContinueOnConnectorFailure.Enabled(),
+			ContinueOnConnectorFailure: false,
 			Signer:                     signerInstance,
 			IDTokensValidFor:           idTokensValidFor,
 		}
@@ -99,4 +103,12 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+func getEnv(name, defaultValue string) string {
+	if val, ok := os.LookupEnv(name); ok {
+		return val
+	}
+
+	return defaultValue
 }
