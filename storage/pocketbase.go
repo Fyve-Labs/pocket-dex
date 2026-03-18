@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/dexidp/dex/storage"
-	"github.com/dexidp/dex/storage/memory"
+	"github.com/dexidp/dex/storage/sql"
 	"github.com/pocketbase/dbx"
 	"github.com/pocketbase/pocketbase/core"
 )
@@ -20,15 +20,15 @@ type pbStorage struct {
 	App core.App
 }
 
-func New(app core.App) storage.Storage {
-	s := memory.New(app.Logger())
-	s = WithPocketbaseStorage(s, app)
+func New(app core.App, file string) (storage.Storage, error) {
+	drv := &sql.SQLite3{File: file}
+	s, err := drv.Open(app.Logger())
+	if err != nil {
+		return nil, err
+	}
+	s = pbStorage{s, app}
 
-	return s
-}
-
-func WithPocketbaseStorage(s storage.Storage, app core.App) storage.Storage {
-	return pbStorage{s, app}
+	return s, nil
 }
 
 func toStorageConnector(r *core.Record) storage.Connector {

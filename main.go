@@ -38,7 +38,10 @@ func main() {
 		keysRotationPeriod := "6h"
 
 		logger := e.App.Logger()
-		s := storage.New(e.App)
+		s, err := storage.New(e.App, "./pb_data/dex.db")
+		if err != nil {
+			return err
+		}
 
 		localConfig := signer.LocalConfig{KeysRotationPeriod: keysRotationPeriod}
 		signerInstance, err := localConfig.Open(context.Background(), s, idTokensValidFor, now, logger)
