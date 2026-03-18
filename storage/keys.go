@@ -83,7 +83,6 @@ func (s pbStorage) UpdateKeys(ctx context.Context, updater func(old storage.Keys
 		}
 
 		if firstUpdate {
-			s.App.Logger().Info("Creating new keys")
 			record := core.NewRecord(collection)
 			record.Set("id", keysRowID)
 
@@ -93,7 +92,7 @@ func (s pbStorage) UpdateKeys(ctx context.Context, updater func(old storage.Keys
 			return txApp.Save(record)
 
 		}
-		s.App.Logger().Info("Rotating keys")
+
 		record, err := txApp.FindRecordById("keys", keysRowID)
 		if err != nil {
 			return err
