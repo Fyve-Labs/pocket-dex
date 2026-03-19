@@ -934,6 +934,15 @@ func init() {
 						"type": "text"
 					},
 					{
+						"hidden": false,
+						"id": "bool1001664029",
+						"name": "public",
+						"presentable": false,
+						"required": false,
+						"system": false,
+						"type": "bool"
+					},
+					{
 						"autogeneratePattern": "",
 						"hidden": true,
 						"id": "text1554180325",
@@ -946,15 +955,6 @@ func init() {
 						"required": false,
 						"system": false,
 						"type": "text"
-					},
-					{
-						"hidden": false,
-						"id": "bool1001664029",
-						"name": "public",
-						"presentable": false,
-						"required": false,
-						"system": false,
-						"type": "bool"
 					},
 					{
 						"hidden": false,
