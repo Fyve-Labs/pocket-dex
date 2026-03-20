@@ -613,6 +613,20 @@ func init() {
 						"type": "text"
 					},
 					{
+						"autogeneratePattern": "",
+						"hidden": false,
+						"id": "text1579384326",
+						"max": 255,
+						"min": 0,
+						"name": "name",
+						"pattern": "",
+						"presentable": false,
+						"primaryKey": false,
+						"required": false,
+						"system": false,
+						"type": "text"
+					},
+					{
 						"cost": 0,
 						"hidden": true,
 						"id": "password901924565",
@@ -651,7 +665,20 @@ func init() {
 						"type": "email"
 					},
 					{
+						"cascadeDelete": false,
+						"collectionId": "pbc_3346940990",
 						"hidden": false,
+						"id": "relation4033689968",
+						"maxSelect": 999,
+						"minSelect": 0,
+						"name": "groups",
+						"presentable": false,
+						"required": false,
+						"system": false,
+						"type": "relation"
+					},
+					{
+						"hidden": true,
 						"id": "bool1547992806",
 						"name": "emailVisibility",
 						"presentable": false,
@@ -669,21 +696,7 @@ func init() {
 						"type": "bool"
 					},
 					{
-						"autogeneratePattern": "",
-						"hidden": false,
-						"id": "text1579384326",
-						"max": 255,
-						"min": 0,
-						"name": "name",
-						"pattern": "",
-						"presentable": false,
-						"primaryKey": false,
-						"required": false,
-						"system": false,
-						"type": "text"
-					},
-					{
-						"hidden": false,
+						"hidden": true,
 						"id": "file376926767",
 						"maxSelect": 1,
 						"maxSize": 0,
@@ -701,19 +714,6 @@ func init() {
 						"system": false,
 						"thumbs": null,
 						"type": "file"
-					},
-					{
-						"cascadeDelete": false,
-						"collectionId": "pbc_3346940990",
-						"hidden": false,
-						"id": "relation4033689968",
-						"maxSelect": 999,
-						"minSelect": 0,
-						"name": "groups",
-						"presentable": false,
-						"required": false,
-						"system": false,
-						"type": "relation"
 					},
 					{
 						"hidden": true,
@@ -901,6 +901,20 @@ func init() {
 							"urn:ietf:params:oauth:grant-type:device_code",
 							"urn:ietf:params:oauth:grant-type:token-exchange"
 						]
+					},
+					{
+						"autogeneratePattern": "",
+						"hidden": false,
+						"id": "text3788167225",
+						"max": 0,
+						"min": 0,
+						"name": "remark",
+						"pattern": "",
+						"presentable": false,
+						"primaryKey": false,
+						"required": false,
+						"system": false,
+						"type": "text"
 					},
 					{
 						"hidden": false,

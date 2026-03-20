@@ -124,6 +124,10 @@ func (a *Authorizer) getUser(identity connector.Identity) (*user, error) {
 		return nil, err
 	}
 
+	if record.GetBool("disabled") {
+		return &user{Email: identity.Email, Groups: []string{}, Disabled: true}, nil
+	}
+
 	record.Set("claims", claims)
 	record.Set("name", name)
 	if err = a.app.Save(record); err != nil {

@@ -11,7 +11,7 @@ require (
 	tailscale.com v1.96.2
 )
 
-replace github.com/dexidp/dex v0.0.0-20260316160653-6b9ce00e119e => github.com/Fyve-Labs/dex v0.0.0-20260318140055-3ea797708c3d
+replace github.com/dexidp/dex v0.0.0-20260316160653-6b9ce00e119e => github.com/Fyve-Labs/dex v0.0.0-20260320140525-53f00c014fa5
 
 require (
 	cloud.google.com/go/auth v0.18.2 // indirect
@@ -94,7 +94,7 @@ require (
 	github.com/jonboulle/clockwork v0.5.0 // indirect
 	github.com/jsimonetti/rtnetlink v1.4.0 // indirect
 	github.com/klauspost/compress v1.18.2 // indirect
-	github.com/lib/pq v1.11.2 // indirect
+	github.com/lib/pq v1.12.0 // indirect
 	github.com/mattermost/xml-roundtrip-validator v0.1.0 // indirect
 	github.com/mattn/go-colorable v0.1.14 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
@@ -116,7 +116,7 @@ require (
 	github.com/prometheus/common v0.66.1 // indirect
 	github.com/prometheus/procfs v0.16.1 // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
-	github.com/russellhaering/goxmldsig v1.5.0 // indirect
+	github.com/russellhaering/goxmldsig v1.6.0 // indirect
 	github.com/ryanuber/go-glob v1.0.0 // indirect
 	github.com/safchain/ethtool v0.3.0 // indirect
 	github.com/shopspring/decimal v1.4.0 // indirect
