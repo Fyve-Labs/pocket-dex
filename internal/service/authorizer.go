@@ -56,8 +56,15 @@ func (a *Authorizer) Authorize(identity *connector.Identity, authID string) erro
 
 	errs := a.app.ExpandRecord(clientRecord, []string{"allowedGroups"}, nil)
 	if len(errs) > 0 {
-		return fmt.Errorf("failed to expand client record: %v", errs)
+		return fmt.Errorf("failed to expand client: %v", errs)
 	}
+
+	defer func() {
+		// Update groups claim with user assigned groups
+		for _, userGroup := range u.Groups {
+			identity.Groups = append(identity.Groups, userGroup)
+		}
+	}()
 
 	clientAllowedGroups := relations2Ids(clientRecord.ExpandedAll("allowedGroups"))
 	if len(clientAllowedGroups) == 0 {
@@ -85,10 +92,6 @@ func (a *Authorizer) Authorize(identity *connector.Identity, authID string) erro
 		}
 	}
 
-	for _, userGroup := range u.Groups {
-		identity.Groups = append(identity.Groups, userGroup)
-	}
-
 	return nil
 }
 
@@ -99,7 +102,7 @@ func (a *Authorizer) getUser(identity connector.Identity) (*user, error) {
 		name = identity.PreferredUsername
 	}
 
-	claimsStr, _ := json.Marshal(identity)
+	claims, _ := json.Marshal(identity)
 	if err != nil && strings.Contains(err.Error(), "no row") {
 		collection, _ := a.app.FindCollectionByNameOrId("users")
 		record = core.NewRecord(collection)
@@ -107,11 +110,11 @@ func (a *Authorizer) getUser(identity connector.Identity) (*user, error) {
 		record.Set("name", name)
 		record.Set("email", identity.Email)
 		record.Set("verified", identity.EmailVerified)
-		record.Set("claims", claimsStr)
+		record.Set("claims", claims)
 		record.Set("password", security.PseudorandomString(8))
 		err = a.app.Save(record)
 		if err != nil {
-			return nil, err // could be email duplicated
+			return nil, err // Could be email duplicated
 		}
 
 		return &user{Email: identity.Email, Groups: []string{}, Disabled: false}, nil
@@ -121,7 +124,7 @@ func (a *Authorizer) getUser(identity connector.Identity) (*user, error) {
 		return nil, err
 	}
 
-	record.Set("claims", claimsStr)
+	record.Set("claims", claims)
 	record.Set("name", name)
 	if err = a.app.Save(record); err != nil {
 		return nil, err
@@ -129,7 +132,7 @@ func (a *Authorizer) getUser(identity connector.Identity) (*user, error) {
 
 	errs := a.app.ExpandRecord(record, []string{"groups"}, nil)
 	if len(errs) > 0 {
-		return nil, fmt.Errorf("failed to expand user record: %v", errs)
+		return nil, fmt.Errorf("failed to expand user: %v", errs)
 	}
 
 	return &user{

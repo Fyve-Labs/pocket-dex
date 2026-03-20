@@ -7,6 +7,7 @@ import (
 	"os"
 	"runtime"
 
+	"github.com/Fyve-Labs/pocket-dex/internal/pb_admin"
 	_ "github.com/Fyve-Labs/pocket-dex/migrations"
 	"github.com/Fyve-Labs/pocket-dex/pocketbase/plugins/dex"
 	"github.com/pocketbase/pocketbase"
@@ -36,7 +37,19 @@ func main() {
 
 	app.RootCmd.AddCommand(commandVersion())
 
-	// Hook to reset Pocketbase original Router
+	app.OnServe().Bind(&hook.Handler[*core.ServeEvent]{
+		Func: func(e *core.ServeEvent) error {
+			go func() {
+				// Start PocketBase Admin in Tailscale network
+				pb_admin.StartServer(e.App)
+			}()
+
+			return e.Next()
+		},
+		Priority: 9999,
+	})
+
+	// Reset Pocketbase original Router
 	app.OnServe().Bind(&hook.Handler[*core.ServeEvent]{
 		Func: func(e *core.ServeEvent) error {
 			pbRouter := router.NewRouter(func(w http.ResponseWriter, r *http.Request) (*core.RequestEvent, router.EventCleanupFunc) {

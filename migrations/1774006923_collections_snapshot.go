@@ -863,7 +863,6 @@ func init() {
 							"microsoft",
 							"ldap",
 							"saml",
-							"oidc2",
 							"local"
 						]
 					},
@@ -1103,7 +1102,7 @@ func init() {
 						"min": 1,
 						"name": "id",
 						"pattern": "^[a-z0-9-_]+$",
-						"presentable": false,
+						"presentable": true,
 						"primaryKey": true,
 						"required": true,
 						"system": true,
@@ -1120,6 +1119,20 @@ func init() {
 						"presentable": false,
 						"primaryKey": false,
 						"required": true,
+						"system": false,
+						"type": "text"
+					},
+					{
+						"autogeneratePattern": "",
+						"hidden": false,
+						"id": "text3788167225",
+						"max": 0,
+						"min": 0,
+						"name": "remark",
+						"pattern": "",
+						"presentable": false,
+						"primaryKey": false,
+						"required": false,
 						"system": false,
 						"type": "text"
 					},

@@ -6,7 +6,6 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/Fyve-Labs/pocket-dex/internal/pb_admin"
 	"github.com/Fyve-Labs/pocket-dex/internal/service"
 	"github.com/Fyve-Labs/pocket-dex/pocketbase/plugins/dex/oidc2"
 	"github.com/Fyve-Labs/pocket-dex/storage"
@@ -59,8 +58,8 @@ func (p *plugin) setupDexServer(e *core.ServeEvent) error {
 	}
 
 	authorizer := service.NewAuthorizer(e.App, s)
-	oidc2Config := &oidc2.Config{Authorizer: authorizer}
-	dex.ConnectorsConfig["oidc2"] = func() dex.ConnectorConfig { return oidc2Config }
+	dex.ConnectorsConfig["oidc"] = func() dex.ConnectorConfig { return &oidc2.Config{Authorizer: authorizer} }
+
 	dexServer, err := dex.NewServer(context.Background(), serverConfig)
 	if err != nil {
 		return err
@@ -70,11 +69,6 @@ func (p *plugin) setupDexServer(e *core.ServeEvent) error {
 		dexServer.ServeHTTP(e.Response, e.Request)
 		return nil
 	})
-
-	go func() {
-		// Start PocketBase Admin in Tailscale network
-		pb_admin.StartServer(e.App)
-	}()
 
 	return e.Next()
 }
