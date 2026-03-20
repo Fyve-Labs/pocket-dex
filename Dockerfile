@@ -62,4 +62,4 @@ ENV DATA_PATH=/var/pocket-dex
 USER pocket-dex:pocket-dex
 
 ENTRYPOINT ["/usr/local/bin/pocket-dex"]
-CMD ["serve"]
+CMD ["serve", "--http=0.0.0.0:8090"]

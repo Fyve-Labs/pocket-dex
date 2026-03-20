@@ -15,8 +15,14 @@ import (
 	"tailscale.com/tsnet"
 )
 
-func MustStartServer(app core.App) {
-	hs := &pbAdminServer{app: app}
+var hs *pbAdminServer
+
+func StartServer(app core.App) {
+	if hs != nil {
+		panic("StartServer called twice")
+	}
+
+	hs = &pbAdminServer{app: app}
 	app.OnTerminate().BindFunc(func(e *core.TerminateEvent) error {
 		if err := hs.Shutdown(); err != nil {
 			return err

@@ -7,7 +7,6 @@ import (
 	"os"
 	"runtime"
 
-	"github.com/Fyve-Labs/pocket-dex/internal/pb_admin"
 	_ "github.com/Fyve-Labs/pocket-dex/migrations"
 	"github.com/Fyve-Labs/pocket-dex/pocketbase/plugins/dex"
 	"github.com/pocketbase/pocketbase"
@@ -35,6 +34,8 @@ func main() {
 		Repo:  "pocket-dex",
 	})
 
+	app.RootCmd.AddCommand(commandVersion())
+
 	// Hook to reset Pocketbase original Router
 	app.OnServe().Bind(&hook.Handler[*core.ServeEvent]{
 		Func: func(e *core.ServeEvent) error {
@@ -55,13 +56,6 @@ func main() {
 	})
 
 	dex.MustRegister(app)
-
-	app.RootCmd.AddCommand(commandVersion())
-
-	go func() {
-		// Starts Pocketbase in a private Tailscale network
-		pb_admin.MustStartServer(app)
-	}()
 
 	err := app.Start()
 	if err != nil {
